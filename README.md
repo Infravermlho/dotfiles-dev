@@ -1,5 +1,7 @@
 # dotfiles-dev
-todo: write this
+dotfiles for non-ui shell environments
+
+todo: everything lol
 
 todo: symlink script
 
