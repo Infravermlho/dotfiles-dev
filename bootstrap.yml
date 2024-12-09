@@ -70,10 +70,11 @@
       expect:
         command: "makepkg -si --noconfirm"
         chdir: /tmp/yay
+        timeout: 3000
         responses:
           (?i)password: "{{ sudo_password }}"
       changed_when: False
-      timeout: 300
+      timeout: 3000
 
     # ssh and git config
     - name: Generate an OpenSSH keypair
