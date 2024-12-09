@@ -7,7 +7,9 @@ Tested mostly in WSL2
 # Missing:
 
 **SSH Agents and forwarding**
+
 **TMUX**
+
 **Lazygit(?)**
 
 Windows Ansible bootstrap
@@ -15,9 +17,13 @@ Windows Ansible bootstrap
 # Contents:
 
 Fish + Starship
+
 TMUX
+
 Neovim
+
 Keychain
+
 Ansible script for complete bootstrap on Arch
 
 # Install:
