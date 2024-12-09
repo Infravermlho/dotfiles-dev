@@ -33,7 +33,7 @@ Ansible script for complete bootstrap on Arch
 didn't test this yet lol but should probably work
 
 ```bash
-sudo pacman -S git ansible
+sudo pacman -S git ansible openssh
 mkdir -p ~/Dotfiles/dev/
 git clone git@github.com:Infravermlho/dotfiles-dev.git ~/Dotfiles/dev/
 cd ~/Dotfiles/dev/
