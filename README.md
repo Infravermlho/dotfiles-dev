@@ -32,7 +32,8 @@ didn't test this yet lol but should probably work
 
 ```bash
 sudo pacman -S git ansible
-mkdir -r ~/Dotfiles/dev/
+mkdir -p ~/Dotfiles/dev/
 git clone git@github.com:Infravermlho/dotfiles-dev.git ~/Dotfiles/dev/
+cd ~/Dotfiles/dev/
 ansible-playbook bootstrap.yml
 ```
