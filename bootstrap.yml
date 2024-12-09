@@ -1,0 +1,93 @@
+#TODO: Keyring
+#TODO: Conform for yml files
+
+- name: Bootstrap development environment
+  hosts: localhost
+  vars_prompt:
+    - name: sudo_password
+      prompt: Insert sudo password
+
+    - name: git_name
+      prompt: Insert name
+      private: false
+
+    - name: git_email
+      prompt: Insert email
+      private: false
+  vars:
+    ansible_become_password: "{{ sudo_password }}"
+
+  tasks:
+    - name: Update with pacman -Syu
+      become: yes
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: Install packages with pacman
+      become: yes
+      community.general.pacman:
+        name:
+          # Apps
+          - git
+          - tmux
+          - neovim
+          # Terminal utils
+          - fish
+          - starship
+          - ripgrep
+          - p7zip
+          - unzip
+          - eza
+          # Misc
+          - npm
+          - base-devel
+          - vi
+          - stow
+          - python-pexpect
+          - openssh
+          - keychain
+        state: present
+
+    - name: change user shell to FISH
+      become: yes
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/fish
+
+    - name: Run stow
+      shell: "stow . --target {{ ansible_env.HOME }} --verbose=2"
+      register: result
+      changed_when: 'result.stderr is search("LINK: ")'
+
+    # Installing the aur manager (yay)
+    - name: Git clone yay repository
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/yay.git"
+        dest: /tmp/yay
+
+    - name: Install yay package build
+      expect:
+        command: "makepkg -si --noconfirm"
+        chdir: /tmp/yay
+        responses:
+          (?i)password: "{{ sudo_password }}"
+      changed_when: False
+      timeout: 300
+
+    # ssh and git config
+    - name: Generate an OpenSSH keypair
+      community.crypto.openssh_keypair:
+        path: "{{ ansible_env.HOME }}/.ssh/id_ed25519"
+        type: ed25519
+        comment: "{{ git_email }}"
+        passphrase: "{{ sudo_password }}"
+
+    # Configure git
+    - git_config:
+        name: item.key
+        scope: global
+        value: item.value
+      loop:
+        - { key: "user.email", value: "{{ git_email }}" }
+        - { key: "user.name", value: "{{ git_name }}" }
