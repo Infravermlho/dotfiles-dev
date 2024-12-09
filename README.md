@@ -6,6 +6,8 @@ Tested mostly in WSL2
 
 # Missing:
 
+**Set mirrors**
+
 **SSH Agents and forwarding**
 
 **TMUX**
