@@ -85,7 +85,8 @@
         passphrase: "{{ sudo_password }}"
 
     # Configure git
-    - git_config:
+    - name: Configuring git user and email
+      git_config:
         name: item.key
         scope: global
         value: item.value
