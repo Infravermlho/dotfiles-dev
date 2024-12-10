@@ -35,7 +35,7 @@ didn't test this yet lol but should probably work
 ```bash
 sudo pacman -S git ansible openssh
 mkdir -p ~/Dotfiles/dev/
-git clone git@github.com:Infravermlho/dotfiles-dev.git ~/Dotfiles/dev/
+git clone https://github.com/Infravermlho/dotfiles-dev.git ~/Dotfiles/dev/
 cd ~/Dotfiles/dev/
 ansible-playbook bootstrap.yml
 ```
