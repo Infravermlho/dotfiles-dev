@@ -8,6 +8,8 @@ Tested mostly in WSL2
 
 **Set mirrors**
 
+**check if yay is already installed**
+
 **TMUX**
 
 **Lazygit(?)**
