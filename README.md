@@ -1,14 +1,8 @@
 # Kolibri's development env dotfiles
 
-Arch Linux dotfiles automated with Ansible, probably going to automate windows too later
-
-Tested mostly in WSL2
+Arch Linux dotfiles and bootstrap automated with Ansible, made for use with WSL2
 
 # Missing:
-
-**Set mirrors**
-
-**check if yay is already installed**
 
 **TMUX**
 
