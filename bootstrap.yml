@@ -102,3 +102,10 @@
         msg:
           - "SSH keys created, add them to your github and servers"
           - "{{ result.stdout }}"
+
+    - name: Changing repository from http to ssh
+      git_config:
+        repo: dotfiles-dev.git
+        name: "remote.origin.url"
+        value: "git@github.com:Infravermlho/dotfiles-dev.git"
+        scope: "local"
