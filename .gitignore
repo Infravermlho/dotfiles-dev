@@ -1,2 +1,22 @@
+# SSH
 .ssh/config.d/*
 !.ssh/config.d/dot_config
+
+# Fish
+completions
+conf.d
+fishd.*
+functions
+vars.fish
+local.fish
+fish_variables
+
+# Nvim
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
