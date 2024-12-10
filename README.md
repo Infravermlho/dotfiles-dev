@@ -8,8 +8,6 @@ Tested mostly in WSL2
 
 **Set mirrors**
 
-**SSH Agents and forwarding**
-
 **TMUX**
 
 **Lazygit(?)**
