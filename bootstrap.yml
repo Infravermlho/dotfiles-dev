@@ -56,7 +56,7 @@
         shell: /usr/bin/fish
 
     - name: Run stow
-      shell: "stow . --target {{ ansible_env.HOME }} --verbose=2"
+      shell: "stow . --target {{ ansible_env.HOME }} --verbose=2 --dotfiles"
       register: result
       changed_when: 'result.stderr is search("LINK: ")'
 
@@ -87,9 +87,9 @@
     # Configure git
     - name: Configuring git user and email
       git_config:
-        name: item.key
+        name: "{{ item.key }}"
         scope: global
-        value: item.value
+        value: "{{ item.value }}"
       loop:
         - { key: "user.email", value: "{{ git_email }}" }
         - { key: "user.name", value: "{{ git_name }}" }
