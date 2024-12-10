@@ -26,5 +26,5 @@ abbr mkdir 'mkdir -p'
 
 # Starting up keychain
 if status --is-interactive
-    keychain --eval --quiet -Q id_ed25519 | source
+    keychain --eval --quiet -Q | source
 end
