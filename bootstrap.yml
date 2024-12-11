@@ -29,6 +29,7 @@
           - git
           - tmux
           - neovim
+          - lazygit
           # Terminal utils
           - fish
           - starship
@@ -63,9 +64,10 @@
       ansible.builtin.service:
         name: tmux@kolibri.service
         enabled: yes
+        state: started
 
     - name: Run stow
-      shell: "stow . --target {{  ansible_env.HOME }} --verbose=2 --dotfiles"
+      shell: "stow . --target {{ ansible_env.HOME }} --verbose=2 --dotfiles"
       register: result
       changed_when: 'result.stderr is search("LINK: ")'
 
@@ -97,13 +99,13 @@
 
     - name: Generate an OpenSSH keypair
       community.crypto.openssh_keypair:
-        path: "{{  ansible_env.HOME }}/.ssh/id_ed25519"
+        path: "{{ ansible_env.HOME }}/.ssh/id_ed25519"
         type: ed25519
         comment: "{{ git_email }}"
         passphrase: "{{ sudo_password }}"
 
     - name: Cat OpenSSH key
-      command: /bin/cat {{  ansible_env.HOME }}/.ssh/id_ed25519.pub
+      command: /bin/cat {{ ansible_env.HOME }}/.ssh/id_ed25519.pub
       register: result
       changed_when: false
 
