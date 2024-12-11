@@ -5,11 +5,12 @@
       prompt: Insert sudo password
 
     - name: git_name
-      prompt: Insert name
+      prompt: Insert name (Leave blank to skip gitconfig)
       private: false
 
     - name: git_email
-      prompt: Insert email
+      prompt: Insert email (Leave blank to skip gitconfig)
+
       private: false
   vars:
     ansible_become_password: "{{ sudo_password }}"
@@ -26,7 +27,6 @@
       community.general.pacman:
         name:
           # Apps
-          - git
           - tmux
           - neovim
           - lazygit
@@ -39,6 +39,7 @@
           - eza
           # Misc
           - npm
+          - luarocks
           - base-devel
           - vi
           - stow
@@ -96,6 +97,7 @@
       loop:
         - { key: "user.email", value: "{{ git_email }}" }
         - { key: "user.name", value: "{{ git_name }}" }
+      when: git_email != "" and git_name != ""
 
     - name: Generate an OpenSSH keypair
       community.crypto.openssh_keypair:

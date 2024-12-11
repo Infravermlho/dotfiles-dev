@@ -21,6 +21,9 @@ return {
 				-- Misc
 				"yaml-language-server",
 				"prettierd",
+				-- Go
+				"gopls",
+				"golangci-lint",
 			})
 		end,
 	},
