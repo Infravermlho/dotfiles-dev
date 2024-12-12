@@ -20,7 +20,7 @@ return {
 				"isort",
 				-- Misc
 				"yaml-language-server",
-				"prettierd",
+				"prettier",
 				-- Go
 				"gopls",
 				"golangci-lint",
@@ -35,9 +35,6 @@ return {
 				["fish"] = { "fish_indent" },
 				["sh"] = { "shfmt" },
 				["python"] = { "isort", "black" },
-				["yaml"] = { "prettierd" },
-				["json"] = { "prettierd" },
-				["markdown"] = { "prettierd" },
 				["vue"] = { "prettierd" },
 			},
 		},
