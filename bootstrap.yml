@@ -39,6 +39,8 @@
           - eza
           # Misc
           - npm
+          - fd
+          - fzf
           - luarocks
           - base-devel
           - vi
