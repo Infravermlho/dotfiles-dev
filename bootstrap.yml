@@ -46,6 +46,8 @@
           - vi
           - stow
           - python-pexpect
+          # Security
+          - bitwarden-cli
           - openssh
           - keychain
         state: present

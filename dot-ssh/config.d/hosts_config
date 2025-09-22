@@ -5,5 +5,16 @@ Host docker
 
 Host wazuh-casaflora
   HostName 10.32.7.21
-  User dev
+  User ol_root
   ForwardAgent yes
+
+Host aec-pb
+  HostName 192.168.224.59
+  User root
+  ForwardAgent yes
+
+Host zabbix
+  HostName 172.16.0.37
+  User ol_root
+  ForwardAgent yes
+
