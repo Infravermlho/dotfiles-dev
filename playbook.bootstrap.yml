@@ -43,7 +43,7 @@
         - { path: "~/.ssh" }
 
     - name: Run stow
-      ansible.builtin.command: "stow . --target {{ ansible_env.HOME }} --verbose=2 --dotfiles"
+      ansible.builtin.command: "stow . --target {{ ansible_facts['env'].HOME }} --verbose=2 --dotfiles"
       register: result
       changed_when: 'result.stderr is search("LINK: ")'
 
@@ -56,7 +56,7 @@
     - name: Change user shell to FISH
       become: true
       ansible.builtin.user:
-        name: "{{ ansible_user_id }}"
+        name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
 
     - name: Copying tmux service to systemd
@@ -104,13 +104,13 @@
 
     - name: Generate an OpenSSH keypair
       community.crypto.openssh_keypair:
-        path: "{{ ansible_env.HOME }}/.ssh/id_ed25519"
+        path: "{{ ansible_facts['env'].HOME }}/.ssh/id_ed25519"
         type: ed25519
         comment: "{{ git_email }}"
         passphrase: "{{ sudo_password }}"
 
     - name: Cat OpenSSH key
-      ansible.builtin.command: /bin/cat {{ ansible_env.HOME }}/.ssh/id_ed25519.pub
+      ansible.builtin.command: /bin/cat {{ ansible_facts['env'].HOME }}/.ssh/id_ed25519.pub
       register: result
       changed_when: false
 
