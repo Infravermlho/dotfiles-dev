@@ -1,0 +1,30 @@
+# SSH
+dot-ssh/*
+!dot-ssh/config
+!dot-ssh/config.d/
+!dot-ssh/config.d/dot_config
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.pem
+*.key
+
+# Fish
+completions
+conf.d
+fishd.*
+functions
+vars.fish
+local.fish
+fish_variables
+
+# Nvim
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data

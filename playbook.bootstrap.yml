@@ -1,0 +1,128 @@
+---
+- name: Bootstrap development environment
+  hosts: localhost
+  vars_files:
+    - ansible_vars.yml
+  vars_prompt:
+    - name: sudo_password
+      prompt: SUDO password
+      private: true
+
+    - name: git_name
+      prompt: Insert name (Leave blank to skip gitconfig)
+      private: false
+
+    - name: git_email
+      prompt: Insert email (Leave blank to skip gitconfig)
+      private: false
+
+  vars:
+    ansible_become_password: "{{ sudo_password }}"
+
+  tasks:
+    - name: Update with pacman -Syu
+      become: true
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+
+    - name: Install stow is present
+      become: true
+      community.general.pacman:
+        name:
+          - stow
+        state: present
+
+    - name: Create .config and .ssh
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: "700"
+      loop:
+        - { path: "~/.config" }
+        - { path: "~/.ssh" }
+
+    - name: Run stow
+      ansible.builtin.command: "stow . --target {{ ansible_env.HOME }} --verbose=2 --dotfiles"
+      register: result
+      changed_when: 'result.stderr is search("LINK: ")'
+
+    - name: Install packages with pacman
+      become: true
+      community.general.pacman:
+        name: "{{ packages.apps + packages.shell + packages.utilities + packages.security }}"
+        state: present
+
+    - name: Change user shell to FISH
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/fish
+
+    - name: Copying tmux service to systemd
+      become: true
+      ansible.builtin.copy:
+        src: ./dot-config/tmux/tmux@.service
+        dest: /etc/systemd/system/tmux@.service
+        mode: "0644"
+
+    - name: Enable tmux service if not started
+      become: true
+      ansible.builtin.service:
+        name: tmux@kolibri.service
+        enabled: true
+        state: started
+
+    # Installing the aur manager (yay)
+    - name: Git clone yay repository
+      git:
+        repo: "https://aur.archlinux.org/yay.git"
+        dest: /tmp/yay
+      tags:
+        - skip_ansible_lint
+
+    - name: Install yay package build
+      ansible.builtin.expect:
+        command: "makepkg -si --noconfirm"
+        chdir: /tmp/yay
+        timeout: 3000
+        responses:
+          (?i)password: "{{ sudo_password }}"
+      changed_when: false
+      timeout: 3000
+
+    # ssh and git config
+    - name: Configuring git user and email
+      community.general.git_config:
+        name: "{{ item.key }}"
+        scope: global
+        value: "{{ item.value }}"
+      loop:
+        - { key: "user.email", value: "{{ git_email }}" }
+        - { key: "user.name", value: "{{ git_name }}" }
+      when: git_email != "" and git_name != ""
+
+    - name: Generate an OpenSSH keypair
+      community.crypto.openssh_keypair:
+        path: "{{ ansible_env.HOME }}/.ssh/id_ed25519"
+        type: ed25519
+        comment: "{{ git_email }}"
+        passphrase: "{{ sudo_password }}"
+
+    - name: Cat OpenSSH key
+      ansible.builtin.command: /bin/cat {{ ansible_env.HOME }}/.ssh/id_ed25519.pub
+      register: result
+      changed_when: false
+
+    - name: List ssh keys
+      ansible.builtin.debug:
+        msg:
+          - "SSH keys created, add them to your github and servers"
+          - "{{ result.stdout }}"
+
+    - name: Changing repository from http to ssh
+      community.general.git_config:
+        repo: .git
+        name: "remote.origin.url"
+        value: "git@github.com:Infravermlho/dotfiles-dev.git"
+        scope: "local"

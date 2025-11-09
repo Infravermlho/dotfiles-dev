@@ -1,0 +1,35 @@
+---
+packages:
+  apps:
+    - tmux
+    - neovim
+    - lazygit
+
+  shell:
+    - fish
+    - starship
+
+  development:
+    - npm
+    - luarocks
+    - base-devel
+    - vi
+    - python-pexpect
+    - lua
+
+  utilities:
+    - ripgrep
+    - p7zip
+    - unzip
+    - eza
+    - wget
+    - fd
+    - fzf
+    - xclip
+    - man-db
+    - man-pages
+
+  security:
+    - bitwarden-cli
+    - openssh
+    - keychain

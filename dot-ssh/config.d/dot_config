@@ -1,0 +1,10 @@
+AddKeysToAgent yes
+
+#  Host example.com
+#    ForwardAgent yes
+
+Host homelab
+  HostName 192.168.15.8
+  User root
+  ForwardAgent yes
+
