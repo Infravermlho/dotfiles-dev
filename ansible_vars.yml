@@ -28,6 +28,7 @@ packages:
     - xclip
     - man-db
     - man-pages
+    - python-pexpect
 
   security:
     - bitwarden-cli
