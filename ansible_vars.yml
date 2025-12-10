@@ -16,6 +16,7 @@ packages:
     - vi
     - python-pexpect
     - lua
+    - npm
 
   utilities:
     - ttf-monofur-nerd
