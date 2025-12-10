@@ -18,6 +18,7 @@ packages:
     - lua
 
   utilities:
+    - ttf-monofur-nerd
     - ripgrep
     - p7zip
     - unzip
