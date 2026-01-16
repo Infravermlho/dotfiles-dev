@@ -12,7 +12,7 @@ alias ld='eza -lhD --icons=auto' # long list dirs
 alias lt='eza --icons=auto --tree' # list folder as tree
 
 # Always use neovim
-alias vi=nvim
+abbr -a vi nvim
 
 # Handy change dir shortcuts
 abbr .. 'cd ..'
@@ -30,6 +30,9 @@ if status --is-interactive
 end
 
 set -x MANPAGER "nvim +Man!"
+
+# Set up fzf key bindings
+fzf --fish | source
 
 # Starting up ssh agent
 if test -z "$SSH_ENV"
