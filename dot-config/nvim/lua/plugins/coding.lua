@@ -33,6 +33,12 @@ return {
 	{
 		"stevearc/conform.nvim",
 		opts = {
+			formatters = {
+				sqlfluff = {
+					stdin = false,
+					args = { "fix", "$FILENAME" },
+				},
+			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				fish = { "fish_indent" },
@@ -40,6 +46,7 @@ return {
 				python = { "isort", "black" },
 				vue = { "prettierd" },
 				yaml = { "prettierd" },
+				sql = { "sqlfluff" },
 			},
 		},
 	},

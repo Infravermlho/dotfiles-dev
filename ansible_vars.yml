@@ -17,6 +17,7 @@ packages:
     - python-pexpect
     - lua
     - npm
+    - tree-sitter-cli
 
   utilities:
     - ttf-monofur-nerd
