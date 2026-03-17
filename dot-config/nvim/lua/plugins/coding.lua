@@ -50,4 +50,33 @@ return {
 			},
 		},
 	},
+	{
+		-- WARNING: Terminal fix:
+		-- https://github.com/LazyVim/LazyVim/pull/6774/changes#diff-f878104b5415a79ed4bb9036974722cad911327fdd46994e04f5065ff90e9a55
+		"folke/sidekick.nvim",
+		opts = function(_, opts)
+			opts.cli = opts.cli or {}
+			opts.cli.win = opts.cli.win or {}
+			opts.cli.win.keys = opts.cli.win.keys or {}
+
+			opts.cli.win.keys.terminal_slash = {
+				"<C-/>",
+				function()
+					Snacks.terminal(nil, { cwd = LazyVim.root() })
+				end,
+				desc = "Terminal (Root Dir)",
+				mode = "t",
+			}
+			opts.cli.win.keys.terminal_underscore = {
+				"<C-_>",
+				function()
+					Snacks.terminal(nil, { cwd = LazyVim.root() })
+				end,
+				desc = "which_key_ignore",
+				mode = "t",
+			}
+
+			return opts
+		end,
+	},
 }
