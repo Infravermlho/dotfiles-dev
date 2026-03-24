@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 return {
 	{
 		"mason-org/mason.nvim",
@@ -51,9 +53,12 @@ return {
 		},
 	},
 	{
-		-- WARNING: Terminal fix:
+		-- WARNING: Terminal fix on opts:
 		-- https://github.com/LazyVim/LazyVim/pull/6774/changes#diff-f878104b5415a79ed4bb9036974722cad911327fdd46994e04f5065ff90e9a55
 		"folke/sidekick.nvim",
+		keys = {
+			{ "<c-.>", false },
+		},
 		opts = function(_, opts)
 			opts.cli = opts.cli or {}
 			opts.cli.win = opts.cli.win or {}
@@ -75,8 +80,15 @@ return {
 				desc = "which_key_ignore",
 				mode = "t",
 			}
-
-			return opts
 		end,
+	},
+	{
+		"coder/claudecode.nvim",
+		keys = {
+			{ "<leader>aa", false },
+			{ "<leader>ad", false },
+			{ "<leader>ay", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+			{ "<leader>an", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+		},
 	},
 }

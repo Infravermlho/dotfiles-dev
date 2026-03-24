@@ -38,3 +38,4 @@ fzf --fish | source
 if test -z "$SSH_ENV"
     set -xg SSH_ENV $HOME/.ssh/environment
 end
+export PATH="$HOME/.local/bin:$PATH"
