@@ -84,6 +84,7 @@ return {
 	},
 	{
 		"coder/claudecode.nvim",
+		lazy = false,
 		keys = {
 			{ "<leader>aa", false },
 			{ "<leader>ad", false },
