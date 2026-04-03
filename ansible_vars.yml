@@ -1,4 +1,6 @@
 ---
+git_remote: "git@github.com:Infravermlho/dotfiles-dev.git"
+
 packages:
   apps:
     - tmux

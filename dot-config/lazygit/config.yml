@@ -1,0 +1,12 @@
+gui:
+  nerdFontsVersion: "3"
+  mouseEvents: true
+  theme:
+    activeBorderColor: ["#d79921", "bold"]
+    inactiveBorderColor: ["#665c54"]
+    selectedLineBgColor: ["#3c3836"]
+
+os:
+  edit: "nvim {{filename}}"
+  editAtLine: "nvim +{{line}} {{filename}}"
+  editAtLineAndWait: "nvim +{{line}} {{filename}}"

@@ -25,6 +25,8 @@
       community.general.pacman:
         update_cache: true
         upgrade: true
+      tags:
+        - packages
 
     - name: Install stow is present
       become: true
@@ -32,6 +34,8 @@
         name:
           - stow
         state: present
+      tags:
+        - stow
 
     - name: Create .config and .ssh
       ansible.builtin.file:
@@ -41,23 +45,31 @@
       loop:
         - { path: "~/.config" }
         - { path: "~/.ssh" }
+      tags:
+        - stow
 
     - name: Run stow
       ansible.builtin.command: "stow . --target {{ ansible_facts['env'].HOME }} --verbose=2 --dotfiles"
       register: result
       changed_when: 'result.stderr is search("LINK: ")'
+      tags:
+        - stow
 
     - name: Install packages with pacman
       become: true
       community.general.pacman:
         name: "{{ packages.apps + packages.shell + packages.utilities + packages.security }}"
         state: present
+      tags:
+        - packages
 
     - name: Change user shell to FISH
       become: true
       ansible.builtin.user:
         name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
+      tags:
+        - packages
 
     - name: Copying tmux service to systemd
       become: true
@@ -65,13 +77,17 @@
         src: ./dot-config/tmux/tmux@.service
         dest: /etc/systemd/system/tmux@.service
         mode: "0644"
+      tags:
+        - packages
 
     - name: Enable tmux service if not started
       become: true
       ansible.builtin.service:
-        name: tmux@kolibri.service
+        name: tmux@{{ ansible_facts['user_id'] }}.service
         enabled: true
         state: started
+      tags:
+        - packages
 
     # Installing the aur manager (yay)
     - name: Git clone yay repository
@@ -79,17 +95,32 @@
         repo: "https://aur.archlinux.org/yay.git"
         dest: /tmp/yay
       tags:
+        - aur
         - skip_ansible_lint
 
-    - name: Install yay package build
-      ansible.builtin.expect:
-        command: "makepkg -si --noconfirm"
+    - name: Build yay package
+      ansible.builtin.command: "makepkg -s --noconfirm"
+      args:
         chdir: /tmp/yay
-        timeout: 3000
-        responses:
-          (?i)password: "{{ sudo_password }}"
-      changed_when: false
-      timeout: 3000
+        creates: /tmp/yay/yay-*.pkg.tar.zst
+      tags:
+        - aur
+
+    - name: Install yay package
+      become: true
+      ansible.builtin.command: "sh -c 'pacman -U --noconfirm /tmp/yay/yay-*.pkg.tar.zst'"
+      args:
+        creates: /usr/bin/yay
+      tags:
+        - aur
+
+    - name: Install TPM
+      git:
+        repo: "https://github.com/tmux-plugins/tpm"
+        dest: "{{ ansible_facts['env'].HOME }}/.tmux/plugins/tpm"
+      tags:
+        - packages
+        - skip_ansible_lint
 
     # ssh and git config
     - name: Configuring git user and email
@@ -101,6 +132,8 @@
         - { key: "user.email", value: "{{ git_email }}" }
         - { key: "user.name", value: "{{ git_name }}" }
       when: git_email != "" and git_name != ""
+      tags:
+        - git
 
     - name: Generate an OpenSSH keypair
       community.crypto.openssh_keypair:
@@ -108,21 +141,29 @@
         type: ed25519
         comment: "{{ git_email }}"
         passphrase: "{{ sudo_password }}"
+      tags:
+        - ssh
 
     - name: Cat OpenSSH key
       ansible.builtin.command: /bin/cat {{ ansible_facts['env'].HOME }}/.ssh/id_ed25519.pub
       register: result
       changed_when: false
+      tags:
+        - ssh
 
     - name: List ssh keys
       ansible.builtin.debug:
         msg:
           - "SSH keys created, add them to your github and servers"
           - "{{ result.stdout }}"
+      tags:
+        - ssh
 
     - name: Changing repository from http to ssh
       community.general.git_config:
         repo: .git
         name: "remote.origin.url"
-        value: "git@github.com:Infravermlho/dotfiles-dev.git"
+        value: "{{ git_remote }}"
         scope: "local"
+      tags:
+        - git
