@@ -96,7 +96,6 @@
         dest: /tmp/yay
       tags:
         - aur
-        - skip_ansible_lint
 
     - name: Build yay package
       ansible.builtin.command: "makepkg -s --noconfirm"
